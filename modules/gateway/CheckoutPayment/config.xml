@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ * CubeCart v6
+ * ========================================
+ * CubeCart is a registered trade mark of CubeCart Limited
+ * Copyright CubeCart Limited 2014. All rights reserved.
+ * UK Private Limited Company No. 5323904
+ * ========================================
+ * Web:   http://www.cubecart.com
+ * Email:  integration@checkout.com
+-->
+<installer version="1.0">
+  <info>
+	<uid>gateway-checkoutApipayment@cubecart.com</uid>
+	<type>gateway</type>
+	<mobile_optimized>false</mobile_optimized>
+	<name><![CDATA[Checkout.Com]]></name>
+	<description><![CDATA[Checkout.Com Payment Gateway]]></description>
+	<version>1.0.0</version>
+	<minVersion>3.0.0</minVersion>
+	<maxVersion>3.*.*</maxVersion>
+	<creator><![CDATA[Checkout.Com]]></creator>
+	<homepage><![CDATA[http://www.cubecart.com]]></homepage>
+	<block>false</block>
+  </info>
+</installer>
