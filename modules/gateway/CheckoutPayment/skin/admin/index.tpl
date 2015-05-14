@@ -44,8 +44,7 @@
                 <label for="mode">{$LANG.checkoutapipayment.mode}</label>
                 <span>
                     <select name="module[mode]">
-                        <option value="test" {$SELECT_mode_test}>{$LANG.checkoutapipayment.test}</option>
-                        <option value="preprod" {$SELECT_mode_preprod}>{$LANG.checkoutapipayment.preprod}</option>
+                        <option value="sandbox" {$SELECT_mode_sandbox}>{$LANG.checkoutapipayment.sandbox}</option>
                         <option value="live" {$SELECT_mode_live}>{$LANG.checkoutapipayment.live}</option>
                     </select>
                 </span>

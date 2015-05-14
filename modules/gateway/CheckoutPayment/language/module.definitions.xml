@@ -12,7 +12,6 @@
 -->
 <definitions version="1.0">
  <group name="checkoutapipayment">
-
   <string name="secret_key"><![CDATA[Secret Key]]></string>
   <string name="public_key"><![CDATA[Public Key]]></string>
   <string name="module_title"><![CDATA[Checkout.Com]]></string>
@@ -23,13 +22,10 @@
   <string name="auth_capture"><![CDATA[Authorize &amp; Capture]]></string>
   <string name="auth_only"><![CDATA[Authorize Only]]></string>
   <string name="payment_type"><![CDATA[Transaction Type]]></string>
-  <string name="test"><![CDATA[Test]]></string>
-  <string name="preprod"><![CDATA[Preprod]]></string>
+  <string name="sandbox"><![CDATA[Sandbox]]></string>
   <string name="live"><![CDATA[Live]]></string>
   <string name="local_payment"><![CDATA[Local Payment]]></string>
   <string name="autocaptime"><![CDATA[Autocaptime]]></string>
   <string name="timeout"><![CDATA[Timeout]]></string>
-
-
  </group>
 </definitions>

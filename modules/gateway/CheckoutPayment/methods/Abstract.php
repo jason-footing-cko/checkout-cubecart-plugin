@@ -22,6 +22,7 @@ abstract class methods_Abstract
         $transData['extra'] = '';
 
         $respondCharge = $this->_createCharge($order);
+       
         if ($respondCharge->isValid()) {
 
             if (preg_match('/^1[0-9]+$/', $respondCharge->getResponseCode())) {
@@ -53,7 +54,8 @@ abstract class methods_Abstract
         }   else {
 
             $status = 'Error';
-            $message = $respondCharge->getExceptionState()->getErrorMessage();
+            $messages = $respondCharge->getExceptionState()->getErrorMessage();
+            $message = explode("\n",$messages);
             $GLOBALS['smarty']->assign('ErrorMessage', $message);
             $order->orderStatus(Order::ORDER_PENDING, $cart_order_id);
             $transData['notes'] = $message;
@@ -72,7 +74,6 @@ abstract class methods_Abstract
         $order_summary = $order->getSummary($cart_order_id);
         $cart = unserialize($order_summary['basket']);
         $module_config = $config->get($order_summary['gateway']);
-
         $billingInfo = $cart['billing_address'];
         $shippingInfo = $cart['delivery_address'];
 
@@ -105,31 +106,40 @@ abstract class methods_Abstract
                 'quantity' => $item['quantity']
             );
         }
-
+        
+        $billPhoneLength = strlen($billingInfo['phone']);
         $billingAddressConfig = array(
             'addressLine1' => $billingInfo['line1'],
             'addressLine2' => $billingInfo['line2'],
             'postcode'     => $billingInfo['postcode'],
-            'country'      => $billingInfo['country'],
+            'country'      => $billingInfo['country_iso'],
             'city'         => $billingInfo['town'],
             'state'        => $billingInfo['state'],
-            'phone'        => array (
-                'number' => $billingInfo['phone']
-                ),
         );
-
+        
+        if ($billPhoneLength > 6){
+              $bilPhoneArray = array(
+                  'phone'  => array('number' => $billingInfo['phone'])
+              );
+              $billingAddressConfig = array_merge_recursive($billingAddressConfig, $bilPhoneArray);  
+        }
+        
+        $shipPhoneLength = strlen($shippingInfo['phone']);
         $shippingAddressConfig = array(
             'addressLine1'  => $shippingInfo['line1'],
             'addressLine2'  => $shippingInfo['line2'],
             'postcode'      => $shippingInfo['postcode'],
-            'country'       => $shippingInfo['country'],
+            'country'       => $shippingInfo['country_iso'],
             'city'          => $shippingInfo['town'],
             'state'         => $shippingInfo['state'],
-            'recipientName' => $shippingInfo['first_name'] . ' ' . $shippingInfo['last_name'],
-            'phone'         => array (
-                'number' => $shippingInfo['phone']
-                ),
         );
+        
+        if ($shipPhoneLength > 6){
+              $shipPhoneArray = array(
+                  'phone'  => array('number' => $shippingInfo['phone'])
+              );
+              $shippingAddressConfig = array_merge_recursive($shippingAddressConfig, $shipPhoneArray);  
+        }
 
         $configs['postedParam'] = array_merge_recursive($configs['postedParam'], array(
             'email'           => $billingInfo['email'],
@@ -157,7 +167,7 @@ abstract class methods_Abstract
     protected function _captureConfig()
     {
         $to_return['postedParam'] = array(
-            'autoCapture' => 'y',
+            'autoCapture' => CheckoutApi_Client_Constant::AUTOCAPUTURE_CAPTURE,
             'autoCapTime' => $_REQUEST['autocaptime']
         );
 
@@ -167,7 +177,7 @@ abstract class methods_Abstract
     protected function _authorizeConfig()
     {
         $to_return['postedParam'] = array(
-            'autoCapture' => 'n',
+            'autoCapture' => CheckoutApi_Client_Constant::AUTOCAPUTURE_AUTH,
             'autoCapTime' => 0
         );
         return $to_return;

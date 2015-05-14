@@ -84,30 +84,39 @@ class methods_creditcard extends methods_Abstract
             );
         }
 
+        $billPhoneLength = strlen($billingInfo['phone']);
         $billingAddressConfig = array(
             'addressLine1' => $billingInfo['line1'],
             'addressLine2' => $billingInfo['line2'],
             'postcode'     => $billingInfo['postcode'],
-            'country'      => $billingInfo['country'],
+            'country'      => $billingInfo['country_iso'],
             'city'         => $billingInfo['town'],
             'state'        => $billingInfo['state'],
-            'phone'        => array (
-                'number' => $billingInfo['phone']
-                ),
         );
-
+        
+        if ($billPhoneLength > 6){
+              $bilPhoneArray = array(
+                  'phone'  => array('number' => $billingInfo['phone'])
+              );
+              $billingAddressConfig = array_merge_recursive($billingAddressConfig, $bilPhoneArray);  
+        }
+        
+        $shipPhoneLength = strlen($shippingInfo['phone']);
         $shippingAddressConfig = array(
             'addressLine1'  => $shippingInfo['line1'],
             'addressLine2'  => $shippingInfo['line2'],
             'postcode'      => $shippingInfo['postcode'],
-            'country'       => $shippingInfo['country'],
+            'country'       => $shippingInfo['country_iso'],
             'city'          => $shippingInfo['town'],
             'state'         => $shippingInfo['state'],
-            'recipientName' => $shippingInfo['first_name'] . ' ' . $shippingInfo['last_name'],
-            'phone'         => array (
-                'number' => $shippingInfo['phone']
-                ),
         );
+        
+        if ($shipPhoneLength > 6){
+              $shipPhoneArray = array(
+                  'phone'  => array('number' => $shippingInfo['phone'])
+              );
+              $shippingAddressConfig = array_merge_recursive($shippingAddressConfig, $shipPhoneArray);  
+        }
 
         $configs['postedParam'] = array_merge_recursive($configs['postedParam'], array(
             'email'           => $billingInfo['email'],

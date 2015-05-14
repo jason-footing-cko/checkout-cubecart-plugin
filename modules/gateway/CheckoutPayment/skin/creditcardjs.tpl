@@ -13,7 +13,7 @@
     });
 </script>
 <script type="text/javascript">
-
+    
     window.CKOConfig = {
         debugMode: false,
         renderMode: 2,
@@ -24,7 +24,6 @@
         currency: '{$CheckoutapiData.currency}',
         customerEmail: '{$CheckoutapiData.email}',
         customerName: '{$CheckoutapiData.name}',
-        paymentMode: 'card',
         title: '',
         subtitle: 'Please enter your credit card details',
         widgetContainerSelector: '.widget-container',
@@ -37,4 +36,8 @@
         }
     };
 </script>
-<script src="https://www.checkout.com/cdn/js/checkout.js" async ></script>
+{if $checkoutapiData.mode =='live'}
+        <script src="https://www.checkout.com/cdn/js/checkout.js" async ></script>
+{else}
+        <script src="//sandbox.checkout.com/js/v1/checkout.js" async ></script>
+{/if}

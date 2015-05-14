@@ -143,6 +143,7 @@ class Gateway
                 'currency'     => $GLOBALS['config']->get('config', 'default_currency'),
                 'email'        => $this->_basket['billing_address']['email'],
                 'name'         => $this->_basket['billing_address']['first_name'] . ' ' . $this->_basket['billing_address']['last_name'],
+                'mode'         => $this->_module['mode']
             );
 
             $GLOBALS['smarty']->assign('CheckoutapiData', $smarty_data['checkoutapiData']);
