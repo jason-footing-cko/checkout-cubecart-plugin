@@ -22,13 +22,25 @@ abstract class methods_Abstract
         $transData['extra'] = '';
 
         $respondCharge = $this->_createCharge($order);
-       
+        $toValidate = array(
+          'currency' => $_REQUEST['currency_code'],
+          'value' => $_REQUEST['total'],
+          'trackId' => $cart_order_id,
+        );
+        
+        $Api = CheckoutApi_Api::getApi(array('mode' => $this->config->get('checkoutapipayment_mode')));
+        $validateRequest = $Api::validateRequest($toValidate,$respondCharge);
+        
         if ($respondCharge->isValid()) {
 
             if (preg_match('/^1[0-9]+$/', $respondCharge->getResponseCode())) {
-
+              $message = 'Your transaction has been successfully authorized with transaction id : ' . $respondCharge->getId();
+                if(!$validateRequest['status']){    
+                      foreach($validateRequest['message'] as $errormessage){
+                        $message .= $errormessage . '. ';
+                      }
+                }
                 $status = 'Approved';
-                $message = 'Your transaction has been successfully authorized with transaction id : ' . $respondCharge->getId();
                 $order->orderStatus(Order::ORDER_PROCESS, $cart_order_id);
                 $order->paymentStatus(Order::PAYMENT_PROCESS, $cart_order_id);
 
